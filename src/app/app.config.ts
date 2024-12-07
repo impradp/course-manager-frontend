@@ -1,22 +1,30 @@
-// app.config.ts
+// src/app/app.config.ts
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { 
+  provideHttpClient, 
+  withInterceptors 
+} from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
+
 import { routes } from './app.routes';
+import { authInterceptor } from './interceptor/auth.interceptor';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
-    provideAnimations(), // Crucial for animations
+    provideHttpClient(
+      withInterceptors([authInterceptor])
+    ),
+    provideAnimations(),
     provideToastr({
       timeOut: 3000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
-      progressBar: true, // Optional: adds a progress bar
-      closeButton: true  // Optional: adds a close button
+      progressBar: true,
+      closeButton: true
     })
   ]
 };
