@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoginModel } from '../models/login.model';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { LoginService } from '../services/login.service';
 import { RouterLink, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,7 +12,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   standalone: true,
-  imports: [RouterLink,RouterModule,ReactiveFormsModule, CommonModule]
+  imports: [RouterLink,RouterModule,ReactiveFormsModule, CommonModule,ToastrModule]
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -21,7 +22,8 @@ export class LoginComponent {
   constructor(
     private formBuilder: FormBuilder,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [
@@ -50,12 +52,11 @@ export class LoginComponent {
 
     this.loginService.login(loginData).subscribe({
       next: (response) => {
-        console.log('Login successful', response);
-        this.router.navigate(['/login']);
+        this.toastr.success('Login successful', 'Success');
+        this.router.navigate(['/dashboard']);
       },
-      error: (error) => {
-        this.errorMessage = error.message || 'Login failed';
-        console.error('Login error', error);
+      error: (data) => {
+        this.toastr.error(data.error?.message || 'Login failed', 'Error');
       }
     });
   }

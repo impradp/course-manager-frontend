@@ -5,30 +5,32 @@ import { SignupModel } from '../models/signup.model';
 import { SignupService } from '../services/signup.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css'],
   standalone: true,
-  imports: [RouterLink, RouterModule,ReactiveFormsModule, CommonModule]
+  imports: [
+    RouterLink, 
+    RouterModule, 
+    ReactiveFormsModule, 
+    CommonModule,
+    ToastrModule
+  ]
 })
 export class SignupComponent {
   signupForm: FormGroup;
   submitted = false;
-  errorMessage = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private signupService: SignupService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.signupForm = this.formBuilder.group({
-      username: ['', [
-        Validators.required, 
-        Validators.minLength(4), 
-        Validators.maxLength(20)
-      ]],
       email: ['', [
         Validators.required, 
         Validators.email
@@ -65,13 +67,12 @@ export class SignupComponent {
     };
 
     this.signupService.signup(signupData).subscribe({
-      next: (response) => {
-        console.log('Signup successful', response);
+      next: (data) => {
+        this.toastr.success('Signup successful', 'Success');
         this.router.navigate(['/login']);
       },
-      error: (error) => {
-        this.errorMessage = error.message || 'Signup failed';
-        console.error('Signup error', error);
+      error: (data) => {
+        this.toastr.error(data.error?.message || 'Signup failed', 'Error');
       }
     });
   }

@@ -1,0 +1,24 @@
+@import '../node_modules/ngx-toastr/toastr.css';
+.toast-container {
+    @apply fixed z-[1000];
+  }
+  
+  .toast-message {
+    @apply text-sm;
+  }
+  
+  .toast-success {
+    @apply bg-green-500 text-white;
+  }
+  
+  .toast-error {
+    @apply bg-red-500 text-white;
+  }
+  
+  .toast-warning {
+    @apply bg-yellow-500 text-white;
+  }
+  
+  .toast-info {
+    @apply bg-blue-500 text-white;
+  }

@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SignupModel } from '../models/signup.model';
+import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignupService {
-  private apiUrl = 'http://localhost:8080/api/auth/signup'; // Backend endpoint
-
-  constructor(private http: HttpClient) {}
+  constructor(private apiService: ApiService) {}
 
   signup(signupData: SignupModel): Observable<any> {
-    return this.http.post(this.apiUrl, signupData);
+    return this.apiService.post('/instructors', signupData);
   }
 }
