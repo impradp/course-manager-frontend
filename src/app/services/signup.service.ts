@@ -10,6 +10,6 @@ export class SignupService {
   constructor(private apiService: ApiService) {}
 
   signup(signupData: SignupModel): Observable<any> {
-    return this.apiService.post('/instructors', signupData);
+    return this.apiService.post('/auth/sign-up', signupData);
   }
 }
