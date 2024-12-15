@@ -36,7 +36,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               // Clone the request with the new token
               const retryReq = req.clone({
                 setHeaders: {
-                  Authorization: `Bearer ${newTokenResponse.access_token}`
+                  Authorization: `Bearer ${newTokenResponse?.accessToken}`
                 }
               });
               

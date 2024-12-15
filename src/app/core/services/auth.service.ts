@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
+import { User } from '../models/user.model';
+import { UserService } from './user.service';
+import { ApiService } from '../../api.service';
 import { LoginModel, LoginResponseModel } from '../models/login.model';
-import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +16,9 @@ export class AuthService {
   private REFRESH_TOKEN_KEY = 'refresh_token';
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    private userService: UserService,
+    private router: Router
   ) {}
 
   // Store tokens
@@ -44,19 +49,8 @@ export class AuthService {
   }
 
   // Validate token by calling a protected endpoint
-  validateToken(): Observable<boolean> {
-    const token = this.getToken();
-  
-    // Improved undefined and empty string checking
-    if (!token || token === 'undefined') {
-      return of(false);
-    }
-  
-    return this.apiService.get('/users/self', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).pipe(
+  validateToken(): Observable<boolean> {  
+    return this.apiService.get('/users/self').pipe(
       map(() => true),
       catchError(() => of(false))
     );
@@ -74,14 +68,34 @@ export class AuthService {
     );
   }
 
-  // Logout method
-  logout(): Observable<any> {
-    return this.apiService.post('/auth/logout', {}).pipe(
-      map(() => {
-        this.removeToken();
-        this.removeRefreshToken();
+  getCurrentUser(): Observable<User> {
+    return this.apiService.get<User>('/users/self').pipe(
+      map((response: any) => {
+        // Create a new User object from the API response
+        const user: User = {
+          id: response?.data?.user.id,
+          // Map other properties from the response
+          email: response?.data?.user.email,
+          name:"Admin"
+          // Add any additional mapping as needed
+        };
+        
+        this.userService.setCurrentUser(user);
+        return user;
+      }),
+      catchError((error) => {
+        if(error.status===403){
+          this.router.navigate(['/login']);
+        }
+        return throwError(() => error);
       })
     );
+  }
+
+  // Logout method
+  logout(): void {
+    this.removeToken();
+    this.removeRefreshToken();
   }
 
   // Refresh token method
@@ -94,9 +108,8 @@ export class AuthService {
       }
     }).pipe(
       map((response: any) => {
-        // Assuming the backend returns an object with access_token and refresh_token
-        this.setToken(response?.accessToken);
-        this.setRefreshToken(response?.refreshToken);
+        this.setToken(response?.data?.accessToken);
+        this.setRefreshToken(response?.data?.refreshToken);
         return response.data;
       })
     );

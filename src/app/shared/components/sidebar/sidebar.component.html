@@ -1,0 +1,44 @@
+<div class="fixed left-0 top-0 h-full w-64 bg-gray-100 border-r p-6">
+  <div class="mb-10 flex items-center space-x-4">
+    <img 
+      src="assets/logo.png" 
+      alt="Black Pebble Studios" 
+      class="h-12 w-12 rounded-full"
+    />
+    <span class="text-lg font-bold">Black Pebble Studios</span>
+  </div>
+  
+  <button 
+    class="w-full bg-blue-500 text-white py-2 rounded mb-6 hover:bg-blue-600 transition"
+    routerLink="/courses/create"
+  >
+    + Create New Course
+  </button>
+  
+  <div>
+    <h4 class="text-gray-600 mb-4">My Courses</h4>
+    <ul>
+      <li 
+        *ngFor="let course of courses" 
+        class="bg-white p-3 mb-2 rounded flex items-center space-x-2 hover:bg-gray-200 cursor-pointer"
+        [routerLink]="['/courses', course.id]"
+        [attr.title]="course.title + ' (' + (course.isApproved ? 'Approved' : 'Draft') + ')'"
+      >
+        <svg 
+          class="h-5 w-5"
+          [class.text-green-500]="course.isApproved" 
+          [class.text-black]="!course.isApproved"
+          xmlns="http://www.w3.org/2000/svg" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M5 13l4 4L19 7" 
+          />
+        </svg>
+        <span>{{ course.title.length > 15 ? (course.title | slice:0:15) + '...' : course.title }}</span>
+      </li>
+    </ul>
+  </div>
+</div>

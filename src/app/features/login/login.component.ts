@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { LoginModel } from '../models/login.model';
+import { LoginModel } from '../../core/models/login.model';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { RouterLink, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -40,11 +40,13 @@ export class LoginComponent {
 
   ngOnInit(): void {
     // Check if already authenticated
-    this.authService.validateToken().subscribe(isValid => {
-      if (isValid) {
-        this.router.navigate(['/dashboard']);
-      }
-    });
+    if(this.authService.getToken()){
+      this.authService.validateToken().subscribe(isValid => {
+        if (isValid) {
+          this.router.navigate(['/dashboard']);
+        }
+      });
+    }
   }
 
   onSubmit(): void {
