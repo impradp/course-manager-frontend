@@ -4,24 +4,38 @@ import { LoginComponent } from './features/login/login.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './features/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
+import { ProfileComponent } from './features/profile/profile.component';
+import { CourseListComponent } from './features/courses/course-list/course-list.component';
 
 export const routes: Routes = [
-  { path: '', component: LoginComponent }, // Default route
+  { path: '', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  {
-    path: 'courses',
+  { 
+    path: 'dashboard', 
+    component: DashboardComponent,
     children: [
+      { 
+        path: '', // Default route redirects to courses
+        redirectTo: 'courses',
+        pathMatch: 'full'
+      },
       {
-        path: 'create',
+        path: 'courses',
+        component: CourseListComponent
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent
+      },
+      {
+        path: 'courses/create',
         loadComponent: () => import('./features/courses/course-detail/course-detail.component')
       },
       {
-        path: ':id',
+        path: 'courses/:id',
         loadComponent: () => import('./features/courses/course-detail/course-detail.component')
-      },
-      
+      }
     ]
   },
   { path: 'forgot-password', component: ForgotPasswordComponent },

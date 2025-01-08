@@ -1,8 +1,8 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, HostListener, ElementRef, ViewChild } from '@angular/core';
-
-
+import { ImageUrlService } from '../../../core/services/image-url.service';
+import { Router } from '@angular/router';
 import { User } from '../../../core/models/user.model';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
@@ -24,10 +24,12 @@ export class ProfileDropdownComponent {
   @ViewChild('dropdownContainer', { static: false }) dropdownContainer!: ElementRef;
 
   isDropdownOpen = false;
-
+  
   constructor(
     private dialog: Dialog,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private imageUrlService: ImageUrlService,
+    private router: Router
   ) {}
 
   @HostListener('document:click', ['$event'])
@@ -57,8 +59,12 @@ export class ProfileDropdownComponent {
     });
   }
 
+  getProfileImageUrl(): string {
+    return this.imageUrlService.getProfileImageUrl(this.user?.avatar);
+  }
+
   navigateToProfile(): void {
-    this.profileNavigate.emit();
+    this.router.navigate(['/dashboard/profile']);
     this.isDropdownOpen = false;
   }
 

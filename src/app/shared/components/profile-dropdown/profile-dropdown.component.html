@@ -7,10 +7,12 @@
     class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center relative"
   >
     <img 
-      [src]="user?.avatar || 'assets/icon-profile.png'" 
+      [src]="getProfileImageUrl()"
       alt="Profile" 
       class="w-8 h-8 rounded-full object-cover"
     />
+
+
   </div>
 </button>
 
@@ -21,7 +23,7 @@
     >
       <div class="p-4 border-b border-gray-200 flex items-center space-x-4">
         <img 
-          [src]="user?.avatar || 'assets/icon-profile.png'" 
+          [src]="getProfileImageUrl()" 
           alt="Profile" 
           class="w-12 h-12 rounded-full object-cover"
         />

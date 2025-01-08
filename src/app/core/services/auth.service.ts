@@ -71,12 +71,11 @@ export class AuthService {
   getCurrentUser(): Observable<User> {
     return this.apiService.get<User>('/users/self').pipe(
       map((response: any) => {
-        // Create a new User object from the API response
         const user: User = {
           id: response?.data?.user.id,
-          // Map other properties from the response
           email: response?.data?.user.email,
-          name:"Admin"
+          name:response?.data?.user.name,
+          avatar:response?.data?.user.avatar,
           // Add any additional mapping as needed
         };
         

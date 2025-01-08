@@ -1,5 +1,8 @@
 <div class="fixed left-0 top-0 h-full w-64 bg-gray-100 border-r p-6">
-  <div class="mb-10 flex items-center space-x-4">
+  <div 
+    class="mb-10 flex items-center space-x-4 cursor-pointer hover:opacity-80" 
+    routerLink="/dashboard/courses"
+  >
     <img 
       src="assets/logo.png" 
       alt="Black Pebble Studios" 
@@ -10,7 +13,7 @@
   
   <button 
     class="w-full bg-blue-500 text-white py-2 rounded mb-6 hover:bg-blue-600 transition"
-    routerLink="/courses/create"
+    routerLink="/dashboard/courses/create"
   >
     + Create New Course
   </button>
@@ -21,7 +24,7 @@
       <li 
         *ngFor="let course of courses" 
         class="bg-white p-3 mb-2 rounded flex items-center space-x-2 hover:bg-gray-200 cursor-pointer"
-        [routerLink]="['/courses', course.id]"
+        [routerLink]="['/dashboard/courses', course.id]" 
         [attr.title]="course.title + ' (' + (course.isApproved ? 'Approved' : 'Draft') + ')'"
       >
         <svg 

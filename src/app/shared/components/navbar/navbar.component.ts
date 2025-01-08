@@ -7,7 +7,6 @@ import { User } from '../../../core/models/user.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.component';
 
-
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
