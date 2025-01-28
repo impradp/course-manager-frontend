@@ -1,0 +1,66 @@
+# Configuration for Dependabot version updates
+version: 2
+updates:
+  # NPM dependencies (including Angular, RxJS, and related packages)
+  - package-ecosystem: "npm"
+    directory: "/" # Look for package.json in the root directory
+    schedule:
+      interval: "daily" # Check for updates daily
+      time: "09:00" # At 09:00 UTC
+      timezone: "UTC"
+    groups:
+      # Group all Angular core packages together
+      angular-core-packages:
+        patterns:
+          - "@angular/*" # Matches all Angular packages (e.g., @angular/core, @angular/common)
+      # Group Angular Material and CDK together
+      angular-material-packages:
+        patterns:
+          - "@angular/material"
+          - "@angular/cdk"
+      # Group RxJS packages together
+      rxjs-packages:
+        patterns:
+          - "rxjs"
+      # Group testing-related packages together
+      testing-packages:
+        patterns:
+          - "jasmine*" # Matches jasmine-core, jasmine-spec-reporter, etc.
+          - "karma*" # Matches karma, karma-chrome-launcher, etc.
+          - "@types/jasmine"
+      # Group build and tooling packages together
+      build-tooling-packages:
+        patterns:
+          - "@angular-devkit/*" # Matches @angular-devkit/build-angular, etc.
+          - "@angular/cli"
+          - "typescript"
+          - "autoprefixer"
+          - "postcss"
+          - "tailwindcss"
+    # Optional: Ignore major version updates for specific packages
+    # ignore:
+    #   - dependency-name: '@angular/*'
+    #     update-types: ['version-update:semver-major']
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "chore"
+      include: "scope"
+    open-pull-requests-limit: 10 # Limit the number of open PRs
+    versioning-strategy: increase
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/" # Look for workflows in the root directory
+    schedule:
+      interval: "daily" # Check for updates daily
+      time: "09:00"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
